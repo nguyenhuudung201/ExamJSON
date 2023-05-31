@@ -68,10 +68,6 @@ public class JSONManagement {
             callableStatement.setString(3, api.getTitle());
             callableStatement.setString(4, api.getBody());
 
-/*
-            callableStatement.setInt(1, api.getUserId());
-            callableStatement.setString(2, api.getTitle());
-            callableStatement.setString(3, api.getBody());*/
             return ( callableStatement.executeUpdate() > 0);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
