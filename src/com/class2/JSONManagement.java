@@ -11,6 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Map;
 
 public class JSONManagement {
@@ -73,6 +75,38 @@ public class JSONManagement {
             throw new Exception(e.getMessage());
         }
     }
+    public boolean deleteApi(int id) throws Exception {
+        try {
+            Connection connection = DBUtil.getConnection();
+            CallableStatement callableStatement
+                    = connection.prepareCall("{call sp_DeleteById(?)}");
+                callableStatement.setInt(1, id);
+            return ( callableStatement.executeUpdate() > 0);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+    public void getAll() throws Exception {
+        try {
+            Connection connection = DBUtil.getConnection();
+            Statement stmt= connection.createStatement();
+            ResultSet rs = stmt.executeQuery("{call sp_GetAll}");
+            while (rs.next()){
+                System.out.println("=====API======");
+                int id = rs.getInt("id");
+                System.out.println(id);
+                int userID = rs.getInt("userID");
+                System.out.println(userID);
+                String title = rs.getString("titile");
+                System.out.println(title);
+                String body = rs.getString("body");
+                System.out.println(body);
+            }
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
     public void readJSONFromAPI() throws Exception {
         try {
             String apiUrl = "https://jsonplaceholder.typicode.com/posts";
@@ -90,6 +124,7 @@ public class JSONManagement {
             while ((line = reader.readLine()) != null) {
                 response.append(line);
             }
+
             reader.close();
 
             org.json.JSONArray jsonArray = new org.json.JSONArray(response.toString());
@@ -105,9 +140,7 @@ public class JSONManagement {
                 api.setTitle(title);
                 api.setBody(body);
                 addApi(api);
-
             }
-
             conn.disconnect();
 
         } catch (Exception e) {

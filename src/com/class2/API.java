@@ -6,6 +6,16 @@ public class API {
     private String title;
     private String body;
 
+    public API() {
+    }
+
+    public API(int id, int userId, String title, String body) {
+        this.id = id;
+        this.userId = userId;
+        this.title = title;
+        this.body = body;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
